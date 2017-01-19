@@ -12,10 +12,6 @@
 #define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
 #define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
 
-//图片缩放比例
-#define kMinZoomScale 0.6f
-#define kMaxZoomScale 2.0f
-
 @interface PhotoBrowser ()<UIScrollViewDelegate>
 
 @property (nonatomic,strong) UIScrollView *scrollView;
@@ -48,8 +44,6 @@
     
     //显示图片
     for (int i=0; i<self.imgArr.count; i++) {
-        
-        //UIImage* img = [UIImage imageNamed:self.localImgArr[i]];
         
         UIImageView* imgView = [[UIImageView alloc]init];
         if (self.localFlag) {
@@ -85,7 +79,6 @@
     
 }
 
-
 //打开图片浏览器
 -(void)showPic{
      [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentViewController:self animated:NO completion:nil];
@@ -94,9 +87,9 @@
 //关闭图片浏览器
 -(void)closePic:(UITapGestureRecognizer*)tap{
     UIImageView* imgView = (UIImageView*)tap.view;
-    int tag = imgView.tag;
-    NSLog(@"图片关闭时点击的是%d",tag);
-    
+    int tag = imgView.tag;    
+    //如果需要获取最后一个点击图片的tag,实现代理就行
+    [self.delegate getLastClickImg:tag];
     [_scrollView removeFromSuperview];
     [self dismissViewControllerAnimated:NO completion:nil];
 }
@@ -108,14 +101,6 @@
     int index = (scrollView.contentOffset.x + _scrollView.bounds.size.width * 0.5) / _scrollView.bounds.size.width;
     
     self.indexLabel.text = [NSString stringWithFormat:@"%d/%d", index + 1, self.imgArr.count];
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    int autualIndex = scrollView.contentOffset.x  / _scrollView.bounds.size.width;
-    //设置当前下标
-    //self.currentImageIndex = autualIndex;
-    
 }
 
 //缩放过程中的图像
@@ -137,7 +122,7 @@
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-   
+   //NSLog(@"");
 }
 
 
